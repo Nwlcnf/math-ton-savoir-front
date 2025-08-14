@@ -1,0 +1,64 @@
+<div class="exercices-container">
+  <div class="search-bar">
+    <span class="icon">🔍</span>
+    <input type="text" [(ngModel)]="searchText" placeholder="Rechercher un exercice..." />
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <span class="filter-label">Niveau :</span>
+      <button *ngFor="let niveau of niveaux"
+              [class.selected]="selectedNiveau === niveau"
+              (click)="toggleFilter('niveau', niveau)">
+        {{ niveau }}
+      </button>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Difficulté :</span>
+      <button *ngFor="let diff of difficultes"
+              [class.selected]="selectedDifficulte === diff"
+              (click)="toggleFilter('difficulte', diff)">
+        {{ diff }}
+      </button>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Type :</span>
+      <button *ngFor="let type of types"
+              [class.selected]="selectedType === type"
+              (click)="toggleFilter('type', type)">
+        {{ type }}
+      </button>
+    </div>
+  </div>
+
+  <div class="filters-reset">
+    <button (click)="resetFilters()">Réinitialiser les filtres</button>
+  </div>
+
+  <div class="exercices-list">
+    <div *ngFor="let ex of filteredExercices" class="exercice-card">
+      <span class="status-icon"
+            [ngClass]="{
+              'not-done': ex.statut === 'non-fait',
+              'in-progress': ex.statut === 'en-cours',
+              'done': ex.statut === 'fait'
+            }"></span>
+
+      <div class="exercice-header">
+        <h3>{{ ex.titre }}</h3>
+        <span class="statut-dot" [ngStyle]="{ 'background-color': getStatutColor(ex.statut) }"></span>
+      </div>
+
+      <p class="description">{{ ex.description }}</p>
+
+      <div class="badges">
+        <span class="badge">{{ ex.niveau }} - {{ ex.difficulte }}</span>
+        <span class="badge type">{{ ex.type }}</span>
+      </div>
+
+      <button class="btn-start" (click)="commencer(ex.id)">Commencer</button>
+    </div>
+  </div>
+</div>

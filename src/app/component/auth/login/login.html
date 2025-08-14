@@ -1,0 +1,28 @@
+<form (ngSubmit)="login()" class="login-form" #form="ngForm" novalidate>
+  <input
+    type="email"
+    placeholder="Email"
+    [(ngModel)]="email"
+    name="email"
+    required
+    #emailInput="ngModel"
+  />
+  <div class="error" *ngIf="emailInput.invalid && (emailInput.touched || emailInput.dirty)">
+    Adresse email invalide.
+  </div>
+
+  <input
+    type="password"
+    placeholder="Mot de passe"
+    [(ngModel)]="password"
+    name="password"
+    required
+    #passwordInput="ngModel"
+  />
+  <div class="error" *ngIf="passwordInput.invalid && (passwordInput.touched || passwordInput.dirty)">
+    Le mot de passe est requis.
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Se connecter</button>
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+</form>

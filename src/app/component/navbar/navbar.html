@@ -1,0 +1,9 @@
+<nav class="navbar">
+  <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">🏠 Dashboard</a>
+  <a routerLink="/lecons" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">📚 Leçons</a>
+  <a routerLink="/exercices" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">📝 Exercices</a>
+
+  <span class="spacer"></span>
+
+  <button *ngIf="isLoggedIn()" (click)="logout()" class="logout-btn">Déconnexion</button>
+</nav>

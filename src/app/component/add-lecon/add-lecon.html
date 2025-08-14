@@ -1,0 +1,56 @@
+<div class="add-lecon-container">
+  <h2>Ajouter une nouvelle leçon</h2>
+
+  <form (ngSubmit)="ajouterLecon()" #leconForm="ngForm">
+    <!-- Titre -->
+    <div class="form-group">
+      <label for="nomLecon">Titre de la leçon</label>
+      <input
+        type="text"
+        id="nomLecon"
+        name="nomLecon"
+        [(ngModel)]="lecon.nomLecon"
+        required
+      />
+    </div>
+
+    <!-- Chapitre -->
+    <div class="form-group">
+      <label for="chapitre">Chapitre</label>
+      <select
+        id="chapitre"
+        name="chapitre"
+        [(ngModel)]="lecon.chapitreId"
+        required
+      >
+        <option [value]="null" disabled selected hidden>Choisir un chapitre</option>
+        <option *ngFor="let chapitre of chapitres" [value]="chapitre.id">
+          {{ chapitre.nom }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Contenu enrichi -->
+    <div class="form-group">
+      <label for="contenuLecon">Contenu de la leçon</label>
+      <ngx-editor
+        [editor]="editor"
+        [(ngModel)]="lecon.contenuLecon"
+        name="contenuLecon"
+        required
+      ></ngx-editor>
+    </div>
+
+    <!-- Aperçu -->
+    <div class="preview-section">
+      <h3>Aperçu du rendu</h3>
+      <div class="preview-box" [innerHTML]="lecon.contenuLecon"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button type="submit" [disabled]="!leconForm.form.valid">Ajouter</button>
+      <button type="button" (click)="resetForm()">Annuler</button>
+    </div>
+  </form>
+</div>

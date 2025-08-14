@@ -1,0 +1,48 @@
+<header>
+  <h2>Bonjour {{ userName }} !</h2>
+  <p class="subtitle">Voici ta progression en mathématiques</p>
+</header>
+
+<section class="progression">
+  <div
+    class="progress-bar"
+    role="progressbar"
+    [attr.aria-valuenow]="progressionPercent"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  >
+    <div class="progress-bar-fill" [style.width.%]="progressionPercent"></div>
+  </div>
+
+  <p class="progress-text">Tu as complété {{ progressionPercent }}% du programme</p>
+</section>
+
+<section class="stats">
+  <div *ngFor="let stat of stats" class="stat-card">
+    <div class="icon">{{ stat.icon }}</div>
+    <h3>{{ stat.title }}</h3>
+    <p class="value">{{ stat.value }}</p>
+    <p class="subtitle">{{ stat.subtitle }}</p>
+  </div>
+</section>
+
+<section class="quick-access">
+  <div
+    *ngFor="let item of quickAccess"
+    class="quick-card"
+    (click)="goTo(item.route)"
+    tabindex="0"
+    role="button"
+    [attr.aria-label]="item.label"
+  >
+    <div class="icon">{{ item.icon }}</div>
+    <p>{{ item.label }}</p>
+  </div>
+</section>
+
+<section class="notifications" *ngIf="notifications.length > 0">
+  <h3>Notifications</h3>
+  <ul>
+    <li *ngFor="let note of notifications">{{ note }}</li>
+  </ul>
+</section>

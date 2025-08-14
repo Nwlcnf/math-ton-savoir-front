@@ -1,0 +1,25 @@
+@if (isLoading) {
+  <mat-spinner></mat-spinner>
+} @else {
+  <div class="back-button">
+    <button mat-raised-button color="primary" routerLink="/lecons" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      ⬅ Retour aux leçons
+    </button>
+  </div>
+  <div class="container">
+    @if (lecon) {
+      <h2>{{ lecon.nomLecon }}</h2>
+      <p><strong>Niveau :</strong> {{ lecon.niveau }}</p>
+      <p><strong>Description :</strong> {{ lecon.description }}</p>
+    }
+
+    @if (pdfUrl !== null && pdfUrl !== undefined) {
+      <div class="pdf-container">
+        <pdf-viewer [src]="pdfUrl!"
+                    [render-text]="true"
+                    [original-size]="false">
+        </pdf-viewer>
+      </div>
+    }
+  </div>
+}

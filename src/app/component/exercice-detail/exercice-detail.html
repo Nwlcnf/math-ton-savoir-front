@@ -1,0 +1,42 @@
+<div class="exercice-detail-container">
+  <div class="navigation-header">
+    <button (click)="precedent()">←</button>
+    <span class="progression">{{ currentIndex + 1 }}/{{ total }}</span>
+    <button (click)="suivant()">→</button>
+  </div>
+
+  <h2>{{ exercice.titre }}</h2>
+  <p class="enonce">{{ exercice.enonce }}</p>
+
+  <div class="zone-reponse">
+    <!-- QCM -->
+    <div *ngIf="exercice.type === 'QCM'" class="qcm-options">
+      <label *ngFor="let opt of exercice.options" class="qcm-option">
+        <input type="radio" name="reponse" [value]="opt" [(ngModel)]="reponse" />
+        {{ opt }}
+      </label>
+    </div>
+
+    <!-- Champ texte -->
+    <div *ngIf="exercice.type === 'TEXTE'" class="texte-reponse">
+      <input type="text" [(ngModel)]="reponse" placeholder="Votre réponse..." />
+    </div>
+
+    <!-- Zone de dessin -->
+    <div *ngIf="exercice.type === 'DESSIN'" class="canvas-container">
+      <canvas #canvas width="300" height="300"></canvas>
+    </div>
+  </div>
+
+  <!-- Feedback -->
+  <div class="feedback" *ngIf="feedback">
+    <p [class.correct]="estCorrect" [class.incorrect]="!estCorrect">{{ feedback }}</p>
+  </div>
+
+  <!-- Boutons -->
+  <div class="actions">
+    <button class="valider" (click)="valider()">Valider la réponse</button>
+    <button class="reessayer" *ngIf="afficherReessayer" (click)="reessayer()">Réessayer</button>
+    <button class="suivant" *ngIf="estCorrect" (click)="suivant()">Exercice suivant</button>
+  </div>
+</div>

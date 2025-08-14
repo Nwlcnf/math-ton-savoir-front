@@ -1,0 +1,41 @@
+<div class="search-bar">
+  <span class="icon">🔍</span>
+  <input
+    type="text"
+    placeholder="Rechercher une leçon..."
+    [(ngModel)]="searchText"
+  />
+</div>
+
+<div class="filters">
+  <div class="filter-group">
+    <span class="filter-label">Niveau :</span>
+    <button
+      *ngFor="let niveau of niveaux"
+      [class.selected]="selectedNiveau === niveau"
+      (click)="toggleNiveau(niveau)"
+      type="button"
+    >
+      {{ niveau }}
+    </button>
+  </div>
+</div>
+
+<div class="filters-reset">
+  <button type="button" (click)="resetFilters()">Réinitialiser les filtres</button>
+</div>
+
+<section class="lecons-list">
+  <article *ngFor="let lecon of filteredLecons" class="lecon-card">
+    <div class="badge">{{ lecon.niveau }}</div>
+    <h3>{{ lecon.nomLecon }}</h3>
+    <p class="description">{{ lecon.description || 'Pas de description' }}</p>
+    <button (click)="voirLecon(lecon.idLecon)" type="button" class="btn-view">
+      Voir la leçon
+    </button>
+  </article>
+
+  <p *ngIf="filteredLecons.length === 0" class="no-result">
+    Aucune leçon trouvée.
+  </p>
+</section>

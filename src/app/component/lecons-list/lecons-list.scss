@@ -1,0 +1,158 @@
+:host {
+  display: block;
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Barre de recherche */
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+
+  .icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    color: #4e73df;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 1rem;
+  }
+}
+
+/* Filtres */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    .filter-label {
+      font-weight: 600;
+      color: #2563eb;
+    }
+
+    button {
+      padding: 6px 12px;
+      border: 1px solid #2563eb;
+      border-radius: 20px;
+      background-color: white;
+      color: #2563eb;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+
+      &.selected {
+        background-color: #2563eb;
+        color: white;
+      }
+
+      &:hover:not(.selected) {
+        background-color: #93c5fd;
+      }
+    }
+  }
+}
+
+/* Liste des leçons en grille */
+.lecons-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+
+  .lecon-card {
+    position: relative;
+    background-color: white;
+    padding: 1.2rem 1rem 1rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #93c5fd;
+      color: white;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    h3 {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 0.5rem;
+      color: #1e3a8a;
+    }
+
+    .description {
+      color: #4a4a4a;
+      font-size: 0.9rem;
+      flex-grow: 1;
+      margin-bottom: 1rem;
+    }
+
+    .btn-view {
+      align-self: flex-end;
+      background-color: #2563eb;
+      border: none;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #1e40af;
+      }
+    }
+  }
+}
+
+.no-result {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  grid-column: 1 / -1;
+}
+
+.filters-reset {
+  margin-bottom: 1rem;
+  text-align: right;
+
+  button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #5a6268;
+    }
+  }
+}
