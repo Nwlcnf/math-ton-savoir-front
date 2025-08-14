@@ -146,4 +146,48 @@ describe('ExercicesListComponent (Jest)', () => {
 
     expect(routerMock.navigate).toHaveBeenCalledWith(['/exercice', 1]);
   });
+
+  it('ngOnInit gère une erreur', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    exerciceServiceMock.getExercices.mockReturnValue(throwError(() => new Error('Erreur serveur')));
+
+    component.ngOnInit();
+
+    expect(component.exercices).toEqual([]);
+    expect(component.loading).toBe(false);
+    expect(console.error).toHaveBeenCalledWith(expect.stringContaining('Erreur lors du chargement des exercices'), expect.any(Error));
+  });
+
+  it('applyFilters renvoie tableau vide si aucun exercice ne correspond', () => {
+    component.exercices = mockExercices;
+    component.searchTerm = 'inexistant';
+    component.selectedType = 'Vrai/Faux';
+    component.selectedDifficulte = 'DIFFICILE';
+
+    component.applyFilters();
+
+    expect(component.filteredExercices.length).toBe(0);
+  });
+
+  it('applyFilters gère ex.lecon undefined', () => {
+    component.exercices = [
+      { enonceExercice: 'test', typeExercice: 'QCM', difficulte: 'FACILE', lecon: undefined }
+    ];
+    component.searchTerm = 'test';
+
+    component.applyFilters();
+
+    expect(component.filteredExercices.length).toBe(1);
+  });
+
+  it('toggleFilter modifie correctement le filtre difficulté', () => {
+    component.exercices = mockExercices;
+
+    component.toggleFilter('difficulte', 'FACILE');
+    expect(component.selectedDifficulte).toBe('FACILE');
+
+    component.toggleFilter('difficulte', 'FACILE');
+    expect(component.selectedDifficulte).toBeNull();
+  });
+
 });
