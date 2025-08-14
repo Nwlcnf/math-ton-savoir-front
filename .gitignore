@@ -113,6 +113,13 @@ dist
 # FuseBox cache
 .fusebox/
 
+# Angular build / tooling
+.angular/
+dist/
+coverage/
+*.tsbuildinfo
+
+
 # DynamoDB Local files
 .dynamodb/
 
