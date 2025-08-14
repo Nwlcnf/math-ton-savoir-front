@@ -16,7 +16,7 @@ export interface Lecon {
   providedIn: 'root'
 })
 export class LeconService {
-  private apiUrl = 'http://localhost:8081/api/lecons';
+  private apiUrl = 'http://localhost:8080/api/lecons';
 
   constructor(private http: HttpClient) {}
 

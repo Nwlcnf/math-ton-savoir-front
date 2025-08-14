@@ -1,64 +1,74 @@
-<div class="exercices-container">
-  <div class="search-bar">
-    <span class="icon">🔍</span>
-    <input type="text" [(ngModel)]="searchText" placeholder="Rechercher un exercice..." />
-  </div>
+<!-- Loader -->
+@if (loading) {
+    <div class="loading-container" role="status" aria-live="polite">
+        <mat-progress-spinner mode="indeterminate" diameter="50" color="primary"></mat-progress-spinner>
+        <p>Chargement des exercices...</p>
+    </div>
+} @else {
 
-  <div class="filters">
-    <div class="filter-group">
-      <span class="filter-label">Niveau :</span>
-      <button *ngFor="let niveau of niveaux"
-              [class.selected]="selectedNiveau === niveau"
-              (click)="toggleFilter('niveau', niveau)">
-        {{ niveau }}
-      </button>
+    <!-- Barre de recherche -->
+    <div class="search-bar">
+        <span class="icon material-icons">search</span>
+        <input
+                type="text"
+                placeholder="Rechercher un exercice..."
+                [(ngModel)]="searchTerm"
+                (input)="applyFilters()" />
     </div>
 
-    <div class="filter-group">
-      <span class="filter-label">Difficulté :</span>
-      <button *ngFor="let diff of difficultes"
-              [class.selected]="selectedDifficulte === diff"
-              (click)="toggleFilter('difficulte', diff)">
-        {{ diff }}
-      </button>
+    <!-- Filtres -->
+    <div class="filters">
+        <div class="filter-group">
+            <span class="filter-label">Type :</span>
+            @for (type of types; track $index) {
+                <button (click)="toggleFilter('typeExercice', type)" [class.selected]="selectedType === type">
+                    {{ type }}
+                </button>
+            }
+        </div>
+
+        <div class="filter-group">
+            <span class="filter-label">Difficulté :</span>
+            @for (diff of difficultes; track $index) {
+                <button (click)="toggleFilter('difficulte', diff)" [class.selected]="selectedDifficulte === diff">
+                    {{ diff }}
+                </button>
+            }
+        </div>
     </div>
 
-    <div class="filter-group">
-      <span class="filter-label">Type :</span>
-      <button *ngFor="let type of types"
-              [class.selected]="selectedType === type"
-              (click)="toggleFilter('type', type)">
-        {{ type }}
-      </button>
+    <!-- Bouton reset -->
+    <div class="filters-reset">
+        <button (click)="resetFilters()">Réinitialiser</button>
     </div>
-  </div>
 
-  <div class="filters-reset">
-    <button (click)="resetFilters()">Réinitialiser les filtres</button>
-  </div>
+    <!-- Liste -->
+    @if (filteredExercices.length > 0) {
+        <div class="exercices-list">
+            @for (ex of filteredExercices; track $index) {
+                <div class="exercice-card" tabindex="0">
 
-  <div class="exercices-list">
-    <div *ngFor="let ex of filteredExercices" class="exercice-card">
-      <span class="status-icon"
-            [ngClass]="{
-              'not-done': ex.statut === 'non-fait',
-              'in-progress': ex.statut === 'en-cours',
-              'done': ex.statut === 'fait'
-            }"></span>
+                    <!-- Ligne badges -->
+                    <div class="badge-row">
+                        <span class="badge type">{{ ex.typeExercice }}</span>
+                        <span class="badge diff diff-{{ ex.difficulte | lowercase }}">{{ ex.difficulte }}</span>
+                    </div>
 
-      <div class="exercice-header">
-        <h3>{{ ex.titre }}</h3>
-        <span class="statut-dot" [ngStyle]="{ 'background-color': getStatutColor(ex.statut) }"></span>
-      </div>
+                    <!-- Titre -->
+                    <h3 class="exercice-title">{{ ex.enonceExercice }}</h3>
 
-      <p class="description">{{ ex.description }}</p>
+                    <!-- Infos leçon -->
+                    <p class="lesson-ref">📚 {{ ex.lecon?.nomLecon || 'Leçon inconnue' }}</p>
+                    <p class="chapter-ref">Chapitre : {{ ex.lecon?.chapitre?.nomChapitre || 'Chapitre inconnu' }}</p>
 
-      <div class="badges">
-        <span class="badge">{{ ex.niveau }} - {{ ex.difficulte }}</span>
-        <span class="badge type">{{ ex.type }}</span>
-      </div>
-
-      <button class="btn-start" (click)="commencer(ex.id)">Commencer</button>
-    </div>
-  </div>
-</div>
+                    <!-- Bouton -->
+                    <button class="btn-start" (click)="startExercice(ex.idExercice)">
+                        🚀 Démarrer
+                    </button>
+                </div>
+            }
+        </div>
+    } @else {
+        <p class="no-result">Aucun exercice trouvé.</p>
+    }
+}

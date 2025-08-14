@@ -1,52 +1,60 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute, RouterLink, RouterLinkActive} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ExerciceService } from '../../service/exercice.service';
 
 @Component({
   selector: 'app-exercice-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, MatProgressSpinnerModule, RouterLink, RouterLinkActive],
   templateUrl: './exercice-detail.html',
   styleUrls: ['./exercice-detail.scss']
 })
-export class ExerciceDetailComponent {
-  exercice = {
-    id: 1,
-    titre: 'Résous cette équation',
-    enonce: 'Trouve la valeur de x dans l’équation : 2x + 3 = 11',
-    type: 'TEXTE', // 'QCM', 'TEXTE', 'DESSIN'
-    options: ['4', '6', '5'],
-    solution: '4'
-  };
+export class ExerciceDetailComponent implements OnInit {
 
-  currentIndex = 2;
-  total = 10;
+  exercice: any = null;
+  loading = true;
 
-  reponse: string = '';
-  feedback: string = '';
-  estCorrect: boolean = false;
-  afficherReessayer = false;
+  userAnswer = '';
+  feedbackMessage = '';
+  isCorrect: boolean | null = null;
 
-  valider() {
-    this.estCorrect = this.reponse?.toString().trim() === this.exercice.solution;
-    this.feedback = this.estCorrect
-      ? '✅ Bonne réponse ! Bravo.'
-      : '❌ Mauvaise réponse. La bonne réponse était : ' + this.exercice.solution;
-    this.afficherReessayer = !this.estCorrect;
+  constructor(
+      private route: ActivatedRoute,
+      private exerciceService: ExerciceService
+  ) {}
+
+  ngOnInit(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) {
+      this.exerciceService.getExerciceById(id).subscribe({
+        next: (data) => {
+          this.exercice = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement de l’exercice', err);
+          this.loading = false;
+        }
+      });
+    }
   }
 
-  reessayer() {
-    this.reponse = '';
-    this.feedback = '';
-    this.afficherReessayer = false;
-  }
+  checkAnswer(): void {
+    if (!this.userAnswer.trim()) {
+      this.feedbackMessage = 'Veuillez entrer une réponse.';
+      this.isCorrect = null;
+      return;
+    }
 
-  suivant() {
-    // rediriger ou charger un autre exercice
-  }
-
-  precedent() {
-    // rediriger ou charger l'exercice précédent
+    if (this.exercice.correctionAuto.includes(this.userAnswer.trim())) {
+      this.feedbackMessage = '✅ Bonne réponse !';
+      this.isCorrect = true;
+    } else {
+      this.feedbackMessage = `❌ Mauvaise réponse. ${this.exercice.correctionAuto}`;
+      this.isCorrect = false;
+    }
   }
 }

@@ -1,42 +1,44 @@
-<div class="exercice-detail-container">
-  <div class="navigation-header">
-    <button (click)="precedent()">←</button>
-    <span class="progression">{{ currentIndex + 1 }}/{{ total }}</span>
-    <button (click)="suivant()">→</button>
-  </div>
-
-  <h2>{{ exercice.titre }}</h2>
-  <p class="enonce">{{ exercice.enonce }}</p>
-
-  <div class="zone-reponse">
-    <!-- QCM -->
-    <div *ngIf="exercice.type === 'QCM'" class="qcm-options">
-      <label *ngFor="let opt of exercice.options" class="qcm-option">
-        <input type="radio" name="reponse" [value]="opt" [(ngModel)]="reponse" />
-        {{ opt }}
-      </label>
+@if (loading) {
+    <div class="loading-container">
+        <mat-progress-spinner mode="indeterminate" diameter="50" color="primary"></mat-progress-spinner>
+        <p>Chargement de l'exercice...</p>
     </div>
-
-    <!-- Champ texte -->
-    <div *ngIf="exercice.type === 'TEXTE'" class="texte-reponse">
-      <input type="text" [(ngModel)]="reponse" placeholder="Votre réponse..." />
+} @else if (exercice) {
+    <div class="back-button">
+        <button mat-raised-button color="primary" routerLink="/exercices" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            ⬅ Retour aux exercices
+        </button>
     </div>
+    <div class="exercice-detail-card">
 
-    <!-- Zone de dessin -->
-    <div *ngIf="exercice.type === 'DESSIN'" class="canvas-container">
-      <canvas #canvas width="300" height="300"></canvas>
+        <!-- Badges -->
+        <div class="badge-row">
+            <span class="badge type">{{ exercice.type }}</span>
+            <span class="badge diff diff-{{ exercice.difficulte | lowercase }}">{{ exercice.difficulte }}</span>
+        </div>
+
+        <!-- Énoncé -->
+        <h2 class="exercice-enonce">{{ exercice.enonce }}</h2>
+
+        <!-- Réponse -->
+        <div class="answer-section">
+            <input
+                    type="text"
+                    placeholder="Votre réponse..."
+                    [(ngModel)]="userAnswer"
+                    (keyup.enter)="checkAnswer()" />
+
+            <button class="btn-validate" (click)="checkAnswer()">Valider</button>
+        </div>
+
+        <!-- Feedback -->
+        @if (feedbackMessage) {
+            <div class="feedback" [ngClass]="{ correct: isCorrect, incorrect: !isCorrect }">
+                {{ feedbackMessage }}
+            </div>
+        }
+
     </div>
-  </div>
-
-  <!-- Feedback -->
-  <div class="feedback" *ngIf="feedback">
-    <p [class.correct]="estCorrect" [class.incorrect]="!estCorrect">{{ feedback }}</p>
-  </div>
-
-  <!-- Boutons -->
-  <div class="actions">
-    <button class="valider" (click)="valider()">Valider la réponse</button>
-    <button class="reessayer" *ngIf="afficherReessayer" (click)="reessayer()">Réessayer</button>
-    <button class="suivant" *ngIf="estCorrect" (click)="suivant()">Exercice suivant</button>
-  </div>
-</div>
+} @else {
+    <p>Aucun exercice trouvé.</p>
+}

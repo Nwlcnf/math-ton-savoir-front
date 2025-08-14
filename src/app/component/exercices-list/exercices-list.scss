@@ -1,25 +1,38 @@
 :host {
   display: block;
-  max-width: 960px;
+  max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1rem;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9fafb;
   color: #333;
 }
 
-/* Barre de recherche */
+/* ===== Loader ===== */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+/* ===== Barre de recherche ===== */
 .search-bar {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 10px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 8px 12px;
+  background-color: white;
 
   .icon {
     margin-right: 10px;
-    font-size: 1.2rem;
-    color: #4e73df;
+    font-size: 1.3rem;
+    color: #3b82f6;
   }
 
   input {
@@ -27,15 +40,16 @@
     outline: none;
     flex: 1;
     font-size: 1rem;
+    background: transparent;
   }
 }
 
-/* Filtres */
+/* ===== Filtres ===== */
 .filters {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 
   .filter-group {
     display: flex;
@@ -44,119 +58,35 @@
 
     .filter-label {
       font-weight: 600;
-      color: #2563eb;
+      color: #1e3a8a;
     }
 
     button {
-      padding: 6px 12px;
+      padding: 6px 14px;
       border: 1px solid #2563eb;
       border-radius: 20px;
       background-color: white;
       color: #2563eb;
       cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      font-weight: 500;
+      transition: all 0.3s ease;
 
       &.selected {
         background-color: #2563eb;
         color: white;
       }
 
-      &:hover:not(.selected) {
+      &:hover:not(.selected),
+      &:focus-visible:not(.selected) {
         background-color: #93c5fd;
       }
     }
   }
 }
 
-/* Liste des exercices */
-.exercices-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-
-  .exercice-card {
-    position: relative;
-    background-color: white;
-    padding: 1.2rem 1rem 1rem 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    .badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #93c5fd;
-      color: white;
-      font-size: 0.75rem;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-weight: 600;
-      user-select: none;
-    }
-
-    h3 {
-      font-weight: 700;
-      font-size: 18px;
-      margin-bottom: 0.5rem;
-      color: #1e3a8a;
-    }
-
-    .description {
-      color: #4a4a4a;
-      font-size: 0.9rem;
-      flex-grow: 1;
-      margin-bottom: 1rem;
-    }
-
-    .status-icon {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      &.not-done {
-        background-color: #dc2626; // rouge
-      }
-      &.in-progress {
-        background-color: #f97316; // orange
-      }
-      &.done {
-        background-color: #16a34a; // vert
-      }
-    }
-
-    .btn-start {
-      align-self: flex-end;
-      background-color: #60a5fa;
-      border: none;
-      color: white;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #2563eb;
-      }
-    }
-  }
-}
-
-.no-result {
-  text-align: center;
-  color: #999;
-  font-style: italic;
-  grid-column: 1 / -1;
-}
-
+/* ===== Bouton Reset ===== */
 .filters-reset {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   text-align: right;
 
   button {
@@ -169,8 +99,124 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       background-color: #5a6268;
     }
   }
+}
+
+/* ===== Liste d'exercices ===== */
+.exercices-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.8rem;
+}
+
+/* ===== Carte Exercice ===== */
+.exercice-card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Ligne de badges */
+  .badge-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      user-select: none;
+
+      &.type {
+        background-color: #3b82f6;
+        color: white;
+      }
+      &.diff-facile {
+        background-color: #bbf7d0;
+        color: #166534;
+      }
+      &.diff-moyen {
+        background-color: #fde68a;
+        color: #92400e;
+      }
+      &.diff-difficile {
+        background-color: #fecaca;
+        color: #991b1b;
+      }
+    }
+  }
+
+  /* Titre */
+  .exercice-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #0f172a;
+    margin-bottom: 0.3rem;
+  }
+
+  /* Infos leçon */
+  .lesson-ref {
+    font-size: 0.9rem;
+    color: #075985;
+    margin-bottom: 0.2rem;
+  }
+
+  .chapter-ref {
+    font-size: 0.85rem;
+    color: #2128a8;
+    margin-bottom: 1rem;
+  }
+
+  /* Statut */
+  .statut-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+
+  /* Bouton démarrer */
+  .btn-start {
+    margin-top: auto; /* Alignement bas */
+    background-color: #2563eb;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover,
+    &:focus-visible {
+      background-color: #1e40af;
+    }
+  }
+}
+
+/* ===== Aucun résultat ===== */
+.no-result {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+  font-size: 1rem;
+  grid-column: 1 / -1;
 }
