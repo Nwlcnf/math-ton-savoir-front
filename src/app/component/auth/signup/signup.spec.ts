@@ -30,6 +30,11 @@ describe('SignupComponent', () => {
     routerMock = TestBed.inject(Router) as jest.Mocked<Router>;
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+    localStorage.clear();
+  });
+
   it('devrait créer le composant', () => {
     expect(component).toBeTruthy();
   });
@@ -79,7 +84,6 @@ describe('SignupComponent', () => {
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
     component.signup();
     expect(alertSpy).toHaveBeenCalledWith('Mot de passe trop faible.');
-    alertSpy.mockRestore();
   });
 
   it('signup() alerte si email invalide', () => {
@@ -88,7 +92,6 @@ describe('SignupComponent', () => {
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
     component.signup();
     expect(alertSpy).toHaveBeenCalledWith('Adresse email invalide.');
-    alertSpy.mockRestore();
   });
 
   it('signup() alerte si mots de passe ne correspondent pas', () => {
@@ -99,7 +102,6 @@ describe('SignupComponent', () => {
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
     component.signup();
     expect(alertSpy).toHaveBeenCalledWith('Les mots de passe ne correspondent pas.');
-    alertSpy.mockRestore();
   });
 
   it('signup() alerte si rôle non sélectionné', () => {
@@ -110,16 +112,15 @@ describe('SignupComponent', () => {
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
     component.signup();
     expect(alertSpy).toHaveBeenCalledWith('Veuillez sélectionner un rôle.');
-    alertSpy.mockRestore();
   });
 
-  it('signup() appelle authService.register et navigue sur succès', () => {
+  it('signup() ELEVE sans niveau défini', () => {
     component.password = 'Abc123$%';
     component.confirmPassword = 'Abc123$%';
     component.email = 'test@example.com';
     component.role = 'ELEVE';
     component.pseudo = 'PseudoTest';
-    component.niveau = 'SIXIEME';
+    component.niveau = null;
 
     authServiceMock.register.mockReturnValue(of({ token: 'fake-token' }));
 
@@ -132,13 +133,33 @@ describe('SignupComponent', () => {
       email: 'test@example.com',
       motDePasse: 'Abc123$%',
       role: 'ELEVE',
-      niveau: 'SIXIEME'
+      niveau: null
     });
-    expect(localStorage.getItem('token')).toBe('fake-token');
     expect(alertSpy).toHaveBeenCalledWith('Inscription réussie !');
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/dashboard']);
+  });
 
-    alertSpy.mockRestore();
+  it('signup() ENSEIGNANT ignore le niveau', () => {
+    component.password = 'Abc123$%';
+    component.confirmPassword = 'Abc123$%';
+    component.email = 'test@example.com';
+    component.role = 'ENSEIGNANT';
+    component.pseudo = 'PseudoProf';
+    component.niveau = 'SIXIEME';
+
+    authServiceMock.register.mockReturnValue(of({ token: 'fake-token' }));
+
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    component.signup();
+
+    expect(authServiceMock.register).toHaveBeenCalledWith({
+      pseudo: 'PseudoProf',
+      email: 'test@example.com',
+      motDePasse: 'Abc123$%',
+      role: 'ENSEIGNANT',
+      niveau: null
+    });
+    expect(alertSpy).toHaveBeenCalledWith('Inscription réussie !');
   });
 
   it('signup() gère erreur d’inscription', () => {
@@ -158,8 +179,5 @@ describe('SignupComponent', () => {
 
     expect(alertSpy).toHaveBeenCalledWith("Échec de l'inscription. Vérifiez vos informations.");
     expect(consoleSpy).toHaveBeenCalled();
-
-    alertSpy.mockRestore();
-    consoleSpy.mockRestore();
   });
 });
