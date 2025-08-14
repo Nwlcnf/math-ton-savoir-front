@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "npx jest",
-    "test:coverage": "npx jest --coverage"
+    "test:coverage": "npx jest --coverage",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org nawel-h2 --project math-ton-savoir-front ./dist && sentry-cli sourcemaps upload --org nawel-h2 --project math-ton-savoir-front ./dist"
   },
   "prettier": {
     "overrides": [
@@ -29,6 +30,10 @@
     "@angular/material": "^20.1.6",
     "@angular/platform-browser": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "@sentry/angular": "^10.5.0",
+    "@sentry/browser": "^10.5.0",
+    "@sentry/cli": "^2.52.0",
+    "@sentry/tracing": "^7.120.4",
     "ng2-pdf-viewer": "^10.4.0",
     "ngx-editor": "^19.0.0-beta.1",
     "rxjs": "~7.8.0",

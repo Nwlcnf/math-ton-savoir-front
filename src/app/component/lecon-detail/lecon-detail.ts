@@ -11,7 +11,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
   selector: 'app-lecon-detail',
   templateUrl: './lecon-detail.html',
   imports: [
-    SafeUrlPipe, PdfViewerModule, MatProgressSpinnerModule, RouterLink, RouterLinkActive
+      PdfViewerModule, MatProgressSpinnerModule, RouterLink, RouterLinkActive
   ],
   styleUrls: ['./lecon-detail.scss']
 })

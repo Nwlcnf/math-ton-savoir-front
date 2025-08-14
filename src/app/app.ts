@@ -5,12 +5,11 @@ import { NgxEditorModule } from 'ngx-editor';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
-import { SafeUrlPipe} from './pipe/safe-url.pipe';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, NavbarComponent, NgxEditorModule, HttpClientModule, SafeUrlPipe],
+  imports: [RouterModule, NavbarComponent, NgxEditorModule, HttpClientModule],
   template: `
     <app-navbar></app-navbar>
     <main class="app-content">
