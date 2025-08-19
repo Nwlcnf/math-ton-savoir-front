@@ -1,59 +1,122 @@
-# Frontend
+Math Ton Savoir – Frontend
+==========================
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.2.
+Frontend de l’application **Math Ton Savoir**, une plateforme d’aide aux devoirs en mathématiques pour collégiens.
 
-## Development server
+Ce frontend est développé en **Angular 20**, avec un design basé sur **Angular Material**, et intègre une pipeline **CI/CD GitHub Actions** avec suivi des erreurs via **Sentry**.
 
-To start a local development server, run:
+Table des matières
+------------------
 
-```bash
-ng serve
-```
+*   [Prérequis](#prérequis)
+    
+*   [Installation et exécution locale](#installation-et-exécution-locale)
+    
+*   [Configuration](#configuration)
+    
+*   [CI/CD](#cicd)
+    
+*   [Tests et coverage](#tests-et-coverage)
+    
+*   [Monitoring et erreurs (Sentry)](#monitoring-et-erreurs-sentry)
+    
+    
+*   [Contribuer](#contribuer)
+    
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Prérequis
+---------
 
-## Code scaffolding
+*   Node.js (LTS recommandé)
+    
+*   Angular CLI (npm install -g @angular/cli)
+    
+*   Git
+    
+*   Compte Sentry (pour le suivi des erreurs)
+    
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Installation et exécution locale
+--------------------------------
 
-```bash
-ng generate component component-name
-```
+1.  git clone https://github.com/Nwlcnf/math-ton-savoir-front.gitcd math-ton-savoir-front
+    
+2.  npm install
+    
+3.  npm startL’application sera disponible sur : [http://localhost:4200](http://localhost:4200).
+    
+4.  npm run buildLes fichiers compilés se trouvent dans le dossier dist/.
+    
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Configuration
+-------------
 
-```bash
-ng generate --help
-```
+### Variables d’environnement
 
-## Building
+Le projet utilise **Sentry** pour le suivi des erreurs. Les variables nécessaires sont :
 
-To build the project run:
+*   SENTRY\_AUTH\_TOKEN : Token d’authentification Sentry
+    
+*   SENTRY\_ORG : Organisation Sentry (ex. nawel-h2)
+    
+*   SENTRY\_PROJECT : Nom du projet Sentry (ex. math-ton-savoir-front)
+    
 
-```bash
-ng build
-```
+⚠️ Ces variables sont stockées dans les **secrets GitHub Actions** et ne doivent jamais être commit dans le code.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+CI/CD
+-----
 
-## Running unit tests
+La **pipeline CI/CD** est configurée via **GitHub Actions** et comprend :
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+*   Installation des dépendances Node.js
+    
+*   Exécution des tests unitaires Jest
+    
+*   Vérification du coverage minimal (80 %)
+    
+*   Build Angular
+    
+*   Upload des sourcemaps vers Sentry
+    
 
-```bash
-ng test
-```
+Workflow principal : .github/workflows/ci.yml
 
-## Running end-to-end tests
+Tests et coverage
+-----------------
 
-For end-to-end (e2e) testing, run:
+Les tests unitaires utilisent **Jest** avec jest-preset-angular.
 
-```bash
-ng e2e
-```
+*   npm test
+    
+*   npm run test:coverage
+    
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+👉 Si le coverage global < 80 %, la build échoue dans GitHub Actions.👉 Rapport disponible dans coverage/.
 
-## Additional Resources
+Monitoring et erreurs (Sentry)
+------------------------------
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Le projet utilise **Sentry** pour :
+
+*   Suivre les erreurs en production
+    
+*   Uploader les **sourcemaps** pour un débogage lisible
+    
+
+Commandes utiles :
+
+`   # Injecter et uploader les sourcemaps  npm run sentry:sourcemaps   `
+
+`
+
+Contribuer
+----------
+
+1.  Forker le projet
+    
+2.  Créer une branche feature/xxx
+    
+3.  Commit & push vos changements
+    
+4.  Ouvrir un Pull Request sur main
