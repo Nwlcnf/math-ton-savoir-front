@@ -43,9 +43,9 @@ Installation et exécution locale
     
 2.  npm install
     
-3.  npm startL’application sera disponible sur : [http://localhost:4200](http://localhost:4200).
+3.  ng serve L’application sera disponible sur : [http://localhost:4200](http://localhost:4200).
     
-4.  npm run buildLes fichiers compilés se trouvent dans le dossier dist/.
+4.  ng build Les fichiers compilés se trouvent dans le dossier dist/.
     
 
 Configuration
